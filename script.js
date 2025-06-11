@@ -295,12 +295,10 @@ class PomodoroTimer {
         // Store custom time
         this.customTime = (minutes * 60) + seconds;
         
-        // If we're in custom mode, update the current time
-        if (this.customModeButton.classList.contains('active')) {
-            this.timeLeft = this.customTime;
-            this.updateDisplay();
-            this.animateTimerChange();
-        }
+        // Update the current time immediately
+        this.timeLeft = this.customTime;
+        this.updateDisplay();
+        this.animateTimerChange();
         
         // Close settings panel
         this.toggleSettings();
