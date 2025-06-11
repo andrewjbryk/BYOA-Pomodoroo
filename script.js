@@ -148,6 +148,9 @@ class PomodoroTimer {
         const timeString = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
         this.minutesElement.textContent = minutes.toString().padStart(2, '0');
         this.secondsElement.textContent = seconds.toString().padStart(2, '0');
+        
+        // Update timer color based on remaining time
+        this.timerElement.setAttribute('data-time-left', minutes.toString());
 
         if (this.isRunning) {
             const mode = this.isWorkMode ? 'Work' : 'Rest';
