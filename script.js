@@ -12,6 +12,16 @@ class PomodoroTimer {
         this.shortBreakButton = document.getElementById('shortBreak');
         this.longBreakButton = document.getElementById('longBreak');
         this.quoteElement = document.getElementById('quote');
+        this.settingsBtn = document.getElementById('settingsBtn');
+        this.settingsPanel = document.getElementById('settingsPanel');
+        this.customMinutes = document.getElementById('customMinutes');
+        this.customSeconds = document.getElementById('customSeconds');
+        this.applySettings = document.getElementById('applySettings');
+
+        // Create overlay element
+        this.overlay = document.createElement('div');
+        this.overlay.className = 'overlay';
+        document.body.appendChild(this.overlay);
 
         this.timeLeft = 25 * 60; // 25 minutes in seconds
         this.timerId = null;
@@ -61,6 +71,16 @@ class PomodoroTimer {
         this.pomodoroButton.addEventListener('click', () => this.setMode('pomodoro'));
         this.shortBreakButton.addEventListener('click', () => this.setMode('shortBreak'));
         this.longBreakButton.addEventListener('click', () => this.setMode('longBreak'));
+        this.settingsBtn.addEventListener('click', () => this.toggleSettings());
+        this.applySettings.addEventListener('click', () => this.applyCustomSettings());
+        this.overlay.addEventListener('click', () => this.toggleSettings());
+        
+        // Close settings panel when clicking outside
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && this.settingsPanel.classList.contains('show')) {
+                this.toggleSettings();
+            }
+        });
     }
 
     setWorkMode() {
@@ -229,6 +249,43 @@ class PomodoroTimer {
     startQuoteTicker() {
         // Show a new quote every 30 seconds
         this.quoteInterval = setInterval(() => this.showQuote(), 30000);
+    }
+
+    toggleSettings() {
+        this.settingsPanel.classList.toggle('show');
+        this.overlay.classList.toggle('show');
+        
+        if (this.settingsPanel.classList.contains('show')) {
+            // Set current values in settings panel
+            const minutes = Math.floor(this.timeLeft / 60);
+            const seconds = this.timeLeft % 60;
+            this.customMinutes.value = minutes;
+            this.customSeconds.value = seconds;
+        }
+    }
+
+    applyCustomSettings() {
+        const minutes = parseInt(this.customMinutes.value) || 0;
+        const seconds = parseInt(this.customSeconds.value) || 0;
+        
+        // Validate input
+        if (minutes < 0 || minutes > 60 || seconds < 0 || seconds > 30) {
+            alert('Please enter valid time values:\nMinutes: 0-60\nSeconds: 0 or 30');
+            return;
+        }
+
+        // Convert to seconds
+        this.timeLeft = (minutes * 60) + seconds;
+        
+        // Update display
+        this.updateDisplay();
+        this.animateTimerChange();
+        
+        // Close settings panel
+        this.toggleSettings();
+        
+        // Update work mode button text
+        this.workModeButton.textContent = `Work Mode (${minutes}m${seconds ? '30s' : ''})`;
     }
 }
 
