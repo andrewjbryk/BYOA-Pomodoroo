@@ -17,6 +17,8 @@ class PomodoroTimer {
         this.customMinutes = document.getElementById('customMinutes');
         this.customSeconds = document.getElementById('customSeconds');
         this.applySettings = document.getElementById('applySettings');
+        this.customModeButton = document.getElementById('customMode');
+        this.customTime = 25 * 60; // Store custom time separately
 
         // Create overlay element
         this.overlay = document.createElement('div');
@@ -74,6 +76,7 @@ class PomodoroTimer {
         this.settingsBtn.addEventListener('click', () => this.toggleSettings());
         this.applySettings.addEventListener('click', () => this.applyCustomSettings());
         this.overlay.addEventListener('click', () => this.toggleSettings());
+        this.customModeButton.addEventListener('click', () => this.setMode('custom'));
         
         // Close settings panel when clicking outside
         document.addEventListener('keydown', (e) => {
@@ -85,7 +88,7 @@ class PomodoroTimer {
 
     setWorkMode() {
         this.isWorkMode = true;
-        this.timeLeft = 25 * 60;
+        this.timeLeft = 25 * 60; // Always 25 minutes for work mode
         this.updateModeButtons();
         this.updateDisplay();
         this.animateTimerChange();
@@ -94,7 +97,7 @@ class PomodoroTimer {
         if (!this.isRunning) {
             document.title = this.defaultTitle;
         }
-        this.showQuote(); // Show a work quote
+        this.showQuote();
     }
 
     setRestMode() {
@@ -167,12 +170,27 @@ class PomodoroTimer {
         switch (mode) {
             case 'pomodoro':
                 this.timeLeft = 25 * 60;
+                this.isWorkMode = true;
+                document.body.classList.remove('rest-mode');
+                document.body.classList.add('work-mode');
                 break;
             case 'shortBreak':
                 this.timeLeft = 5 * 60;
+                this.isWorkMode = false;
+                document.body.classList.remove('work-mode');
+                document.body.classList.add('rest-mode');
                 break;
             case 'longBreak':
                 this.timeLeft = 15 * 60;
+                this.isWorkMode = false;
+                document.body.classList.remove('work-mode');
+                document.body.classList.add('rest-mode');
+                break;
+            case 'custom':
+                this.timeLeft = this.customTime;
+                this.isWorkMode = true;
+                document.body.classList.remove('rest-mode');
+                document.body.classList.add('work-mode');
                 break;
         }
         
@@ -181,7 +199,7 @@ class PomodoroTimer {
     }
 
     updateActiveButton(mode) {
-        [this.pomodoroButton, this.shortBreakButton, this.longBreakButton].forEach(button => {
+        [this.pomodoroButton, this.shortBreakButton, this.longBreakButton, this.customModeButton].forEach(button => {
             button.classList.remove('active');
         });
         document.getElementById(mode).classList.add('active');
@@ -274,18 +292,18 @@ class PomodoroTimer {
             return;
         }
 
-        // Convert to seconds
-        this.timeLeft = (minutes * 60) + seconds;
+        // Store custom time
+        this.customTime = (minutes * 60) + seconds;
         
-        // Update display
-        this.updateDisplay();
-        this.animateTimerChange();
+        // If we're in custom mode, update the current time
+        if (this.customModeButton.classList.contains('active')) {
+            this.timeLeft = this.customTime;
+            this.updateDisplay();
+            this.animateTimerChange();
+        }
         
         // Close settings panel
         this.toggleSettings();
-        
-        // Update work mode button text
-        this.workModeButton.textContent = `Work Mode (${minutes}m${seconds ? '30s' : ''})`;
     }
 }
 
