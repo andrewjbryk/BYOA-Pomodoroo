@@ -1,0 +1,191 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --work-primary: #4A90E2;
+    --work-secondary: #357ABD;
+    --rest-primary: #4ECDC4;
+    --rest-secondary: #45B7AF;
+    --timer-active: #9B59B6;
+    --timer-active-secondary: #8E44AD;
+    --background: #F7F7F7;
+    --text-primary: #2D3436;
+    --text-secondary: #636E72;
+    --shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    background-color: var(--background);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-primary);
+    transition: var(--transition);
+}
+
+.container {
+    background-color: white;
+    padding: 3rem;
+    border-radius: 2rem;
+    box-shadow: var(--shadow);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+    transition: var(--transition);
+}
+
+h1 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--work-primary), var(--rest-primary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: var(--transition);
+}
+
+.timer {
+    font-size: 5rem;
+    font-weight: 800;
+    margin: 2rem 0;
+    font-family: 'Inter', sans-serif;
+    transition: var(--transition);
+}
+
+.controls, .mode {
+    display: flex;
+    gap: 1rem;
+    justify-content: center;
+    margin: 1.5rem 0;
+    flex-wrap: wrap;
+}
+
+button {
+    padding: 1rem 2rem;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    letter-spacing: 0.5px;
+}
+
+.controls button {
+    background-color: var(--timer-active);
+    color: white;
+    box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3);
+}
+
+.controls button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(155, 89, 182, 0.4);
+}
+
+#workMode {
+    background-color: var(--work-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(74, 144, 226, 0.3);
+}
+
+#restMode {
+    background-color: var(--rest-primary);
+    color: white;
+    box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+}
+
+#workMode:hover, #restMode:hover {
+    transform: translateY(-2px);
+}
+
+#workMode:hover {
+    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
+}
+
+#restMode:hover {
+    box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+}
+
+#workMode.active {
+    background-color: var(--work-primary);
+    box-shadow: 0 0 20px rgba(74, 144, 226, 0.5);
+    transform: scale(1.05);
+}
+
+#restMode.active {
+    background-color: var(--rest-primary);
+    box-shadow: 0 0 20px rgba(78, 205, 196, 0.5);
+    transform: scale(1.05);
+}
+
+/* Add styles for active timer state */
+.timer.active {
+    color: var(--timer-active);
+}
+
+/* Update background colors for different modes */
+body.work-mode {
+    --background: #F0F7FF;
+}
+
+body.rest-mode {
+    --background: #F0FFF4;
+}
+
+body.timer-active {
+    --background: #F8F0FF;
+}
+
+.mode button {
+    background-color: #f1f3f5;
+    color: var(--text-secondary);
+    font-size: 0.9rem;
+    padding: 0.8rem 1.5rem;
+}
+
+.mode button.active {
+    background-color: var(--text-primary);
+    color: white;
+}
+
+.mode button:hover {
+    background-color: #e9ecef;
+}
+
+.mode button.active:hover {
+    background-color: var(--text-primary);
+}
+
+/* Animation for timer changes */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.timer.changing {
+    animation: pulse 0.3s ease-in-out;
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .container {
+        padding: 2rem;
+        width: 95%;
+    }
+
+    .timer {
+        font-size: 4rem;
+    }
+
+    button {
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+    }
+} 
