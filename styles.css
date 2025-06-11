@@ -203,6 +203,28 @@ body.rest-mode .timer[data-time-left="2"] { color: #6ED9D2; }
 body.rest-mode .timer[data-time-left="1"] { color: #7EDFD9; }
 body.rest-mode .timer[data-time-left="0"] { color: var(--timer-active); }
 
+.quote-ticker {
+    margin: 1rem 0;
+    min-height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.quote-ticker p {
+    font-size: 1.1rem;
+    color: var(--text-secondary);
+    font-style: italic;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.5s ease;
+}
+
+.quote-ticker p.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* Responsive design */
 @media (max-width: 600px) {
     .container {

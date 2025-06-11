@@ -11,14 +11,45 @@ class PomodoroTimer {
         this.pomodoroButton = document.getElementById('pomodoro');
         this.shortBreakButton = document.getElementById('shortBreak');
         this.longBreakButton = document.getElementById('longBreak');
+        this.quoteElement = document.getElementById('quote');
 
         this.timeLeft = 25 * 60; // 25 minutes in seconds
         this.timerId = null;
         this.isRunning = false;
         this.isWorkMode = true;
         this.defaultTitle = 'Pomodoro Timer';
+        this.quoteInterval = null;
+
+        // Motivational quotes
+        this.quotes = {
+            work: [
+                "Focus on being productive instead of busy.",
+                "The key is not to prioritize what's on your schedule, but to schedule your priorities.",
+                "Don't watch the clock; do what it does. Keep going.",
+                "Productivity is never an accident. It is always the result of a commitment to excellence.",
+                "The way to get started is to quit talking and begin doing.",
+                "Your time is limited, so don't waste it living someone else's life.",
+                "The future depends on what you do today.",
+                "Success is not final, failure is not fatal: it is the courage to continue that counts.",
+                "The only way to do great work is to love what you do.",
+                "Stay focused, stay productive!"
+            ],
+            rest: [
+                "Take a break, you've earned it!",
+                "Rest is not idleness, it's essential for productivity.",
+                "A short break can refresh your mind and boost your creativity.",
+                "Rest when you're weary. Refresh and renew yourself.",
+                "Taking breaks is part of the process.",
+                "Rest is the sweet sauce of labor.",
+                "Sometimes the most productive thing you can do is relax.",
+                "A good rest is half the work.",
+                "Take time to recharge your batteries.",
+                "Rest is not a reward for work, it's a part of it."
+            ]
+        };
 
         this.initializeEventListeners();
+        this.showQuote(); // Show initial quote
     }
 
     initializeEventListeners() {
@@ -43,6 +74,7 @@ class PomodoroTimer {
         if (!this.isRunning) {
             document.title = this.defaultTitle;
         }
+        this.showQuote(); // Show a work quote
     }
 
     setRestMode() {
@@ -56,6 +88,7 @@ class PomodoroTimer {
         if (!this.isRunning) {
             document.title = this.defaultTitle;
         }
+        this.showQuote(); // Show a rest quote
     }
 
     updateModeButtons() {
@@ -84,12 +117,14 @@ class PomodoroTimer {
             this.timerElement.classList.add('active');
             document.body.classList.add('timer-active');
             this.updateDisplay();
+            this.startQuoteTicker();
         }
     }
 
     pause() {
         this.isRunning = false;
         clearInterval(this.timerId);
+        clearInterval(this.quoteInterval);
         this.startButton.style.opacity = '1';
         this.pauseButton.style.opacity = '0.7';
         this.timerElement.classList.remove('active');
@@ -102,6 +137,7 @@ class PomodoroTimer {
         this.setMode('pomodoro');
         this.animateTimerChange();
         document.title = this.defaultTitle;
+        this.showQuote(); // Show a new quote on reset
     }
 
     setMode(mode) {
@@ -174,6 +210,25 @@ class PomodoroTimer {
         
         oscillator.start();
         oscillator.stop(audioContext.currentTime + 0.5);
+    }
+
+    showQuote() {
+        const quotes = this.isWorkMode ? this.quotes.work : this.quotes.rest;
+        const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+        
+        // Remove show class for fade out
+        this.quoteElement.classList.remove('show');
+        
+        // Wait for fade out, then update quote and fade in
+        setTimeout(() => {
+            this.quoteElement.textContent = randomQuote;
+            this.quoteElement.classList.add('show');
+        }, 500);
+    }
+
+    startQuoteTicker() {
+        // Show a new quote every 30 seconds
+        this.quoteInterval = setInterval(() => this.showQuote(), 30000);
     }
 }
 
